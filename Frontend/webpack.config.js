@@ -1,10 +1,12 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
-  entry: './src/index.tsx',
+  entry: "./src/index.tsx",
+  devServer: { historyApiFallback: true },
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
+    publicPath: "/",
   },
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
@@ -24,11 +26,15 @@ module.exports = {
         test: /\.css$/,
         loader: "css-loader",
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-    template: path.resolve(__dirname, "src", "index.html"),
+      template: path.resolve(__dirname, "public", "index.html"),
     }),
   ],
-}
+};

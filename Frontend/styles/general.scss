@@ -1,0 +1,9 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh; /* Imposta l'altezza del body al 100% della finestra del browser */
+  display: flex;
+  justify-content: center; /* Centra orizzontalmente */
+  align-items: center; /* Centra verticalmente */
+  font-family: "Arial", sans-serif; /* Specifica il font desiderato per tutto il sito */
+}
