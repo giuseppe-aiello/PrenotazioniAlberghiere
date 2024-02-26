@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { NotificationHandler } from "./../../../utils";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ function Login() {
         console.log(res);
         localStorage.setItem("token", res.data);
         if (!res.data.ID_Cliente) {
+          NotificationHandler.instance.error(res.data);
           // Gestisci il caso in cui il token non è presente (ad esempio, l'utente non è autenticato)
           return Promise.reject("Utente non autenticato");
         }
@@ -23,7 +25,7 @@ function Login() {
         return axios
           .get("http://localhost:8081/area-prenotazioni", {
             params: {
-              id: res.data.ID_Cliente, // Sostituisci "12345" con il tuo ID
+              id: res.data.ID_Cliente,
             },
           })
           .then((res) => {
@@ -67,6 +69,7 @@ function Login() {
               placeholder="Enter Email"
               className="form-control"
               onChange={(e) => setEmail(e.target.value)}
+              required
             ></input>
           </div>
           <div className="field-wrapper">
@@ -75,6 +78,7 @@ function Login() {
               type="password"
               placeholder="Enter password"
               className="form-control"
+              required
               onChange={(e) => setPassword(e.target.value)}
             ></input>
           </div>
@@ -82,7 +86,7 @@ function Login() {
         </form>
       </div>
       <Link className="no-sign" to={"/register"}>
-        Non sei registrato? Fallo subito
+        Non sei registrato? Registrati subito
       </Link>
     </div>
   );

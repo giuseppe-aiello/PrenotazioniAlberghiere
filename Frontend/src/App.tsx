@@ -6,6 +6,9 @@ import Register from "./components/Register/Register";
 import AreaPrenotazioni from "./components/area-prenotazioni/area-prenotazioni";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
+import "./../node_modules/react-toastify/scss/main.scss";
 
 const App = () => {
   //   useEffect(() => {
@@ -22,6 +25,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/area-prenotazioni" element={<AreaPrenotazioni />} />
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 };

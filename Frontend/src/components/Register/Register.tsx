@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { NotificationHandler } from "./../../../utils";
 
 //Cliente (ID_Cliente, Nome, Cognome, Indirizzo,
 //Numero_telefono, Email, Nazionalità, Data_nascita, Password)
@@ -17,6 +18,8 @@ export interface formResult {
 }
 
 function Register() {
+  const [redirectToAreaPrenotazioni, setRedirectToAreaPrenotazioni] =
+    useState(false);
   const [information, setInformation] = useState<formResult>({
     name: "",
     surname: "",
@@ -41,9 +44,45 @@ function Register() {
         birth_date: information.birth_date,
         password: information.password,
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem("token", res.data);
+        if (!res.data.ID_Cliente) {
+          NotificationHandler.instance.error(res.data);
+          // Gestisci il caso in cui il token non è presente (ad esempio, l'utente non è autenticato)
+          return Promise.reject("Utente non autenticato");
+        }
+
+        return axios
+          .get("http://localhost:8081/area-prenotazioni", {
+            params: {
+              id: res.data.ID_Cliente,
+            },
+          })
+          .then((res) => {
+            if (res.data.authenticated) {
+              setRedirectToAreaPrenotazioni(true);
+            }
+          })
+          .catch((err) => {
+            console.error(
+              "Errore durante il recupero dell'area prenotazioni:",
+              err
+            );
+            // Gestisci l'errore, ad esempio mostrando un messaggio di errore all'utente
+            throw err; // Rilancia l'errore per gestirlo altrove, se necessario
+          });
+      })
       .catch((err) => console.log(err));
   }
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (redirectToAreaPrenotazioni) {
+      return navigate("/area-prenotazioni");
+    }
+  }, [redirectToAreaPrenotazioni]);
 
   return (
     <div>
@@ -177,7 +216,7 @@ function Register() {
         </form>
       </div>
       <Link className="already-sign" to={"/"}>
-        Sei già registrato? Registrati subito
+        Sei già registrato? Accedi subito
       </Link>
     </div>
   );
