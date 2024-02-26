@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import AreaPrenotazioni from "./components/area-prenotazioni/area-prenotazioni";
+import PrenotazioniEffettuate from "./components/prenotazioni-effettuate/prenotazioni-effettuate";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -24,6 +25,10 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/area-prenotazioni" element={<AreaPrenotazioni />} />
+        <Route
+          path="/prenotazioni-effettuate"
+          element={<PrenotazioniEffettuate />}
+        />
       </Routes>
       <ToastContainer />
     </BrowserRouter>

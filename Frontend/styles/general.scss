@@ -7,3 +7,32 @@ body {
   align-items: center; /* Centra verticalmente */
   font-family: "Arial", sans-serif; /* Specifica il font desiderato per tutto il sito */
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}

@@ -1,28 +1,39 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 function AreaPrenotazioni() {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  useEffect(() => {
-    // Verifica se l'utente è autenticato
-    const token = localStorage.getItem("token");
-    if (token) {
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-      // Reindirizza l'utente alla pagina di login se non è autenticato
-      window.location.href = "/login";
-    }
-  }, []);
+  //   useEffect(() => {
+  //     // Verifica se l'utente è autenticato
 
-  if (!loggedIn) {
-    return null; // Puoi rendere un messaggio di "accesso negato" o reindirizzare l'utente al login
-  }
+  //     const userString = localStorage.getItem("token");
+  //     const user = JSON.parse(userString);
+  //     console.log(user.Email);
+  //     if (userString) {
+  //       setLoggedIn(true);
+  //     } else {
+  //       setLoggedIn(false);
+  //       // Reindirizza l'utente alla pagina di login se non è autenticato
+  //     }
+  //   }, []);
+  //mettere LOGGEDIN
+
+  const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="main-box">
       <h1>Area Prenotazioni</h1>
-      {/* Contenuto dell'area riservata */}
+      <div className="choice-box">
+        <button
+          onClick={() => {
+            navigate("/prenotazioni-effettuate");
+          }}
+        >
+          Prenotazioni Effettuate
+        </button>
+        <button>Prenota Camera</button>
+      </div>
     </div>
   );
 }

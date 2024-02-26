@@ -46,7 +46,7 @@ function Register() {
       })
       .then((res) => {
         console.log(res);
-        localStorage.setItem("token", res.data);
+        localStorage.setItem("token", JSON.stringify(res.data));
         if (!res.data.ID_Cliente) {
           NotificationHandler.instance.error(res.data);
           // Gestisci il caso in cui il token non è presente (ad esempio, l'utente non è autenticato)

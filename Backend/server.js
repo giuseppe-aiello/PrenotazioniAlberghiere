@@ -7,8 +7,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const SECRET_KEY = "il_tuo_segreto";
-
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -129,7 +127,6 @@ app.post("/register", (req, res) => {
 // }
 
 app.get("/area-prenotazioni", (req, res) => {
-  console.log(req.query.id);
   const token = req.query.id;
   const sql = "SELECT * FROM Cliente WHERE ID_Cliente = ?";
   db.query(sql, [token], (err, data) => {
@@ -140,10 +137,24 @@ app.get("/area-prenotazioni", (req, res) => {
       return res.status(401).json({ error: "Utente non trovato nel database" });
     }
   });
+
   // L'utente è autenticato, puoi restituire le risorse riservate
   res.json({ authenticated: true });
 });
 
+app.post("/prenotazioni", (req, res) => {
+  const user = req.body;
+  const sql = "SELECT * FROM Prenotazione WHERE ID_Cliente = ?";
+  db.query(sql, user.ID_Cliente, (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    if (data.length === 0) {
+      return res.status(401).json({ error: "Nessuna prenotazione" });
+    }
+    res.json(data);
+  });
+});
 //port
 app.listen(8081, () => {
   console.log("Listening...");

@@ -14,8 +14,8 @@ function Login() {
     axios
       .post("http://localhost:8081/login", { email, password })
       .then((res) => {
-        console.log(res);
-        localStorage.setItem("token", res.data);
+        console.log(res.data);
+        localStorage.setItem("token", JSON.stringify(res.data));
         if (!res.data.ID_Cliente) {
           NotificationHandler.instance.error(res.data);
           // Gestisci il caso in cui il token non è presente (ad esempio, l'utente non è autenticato)
