@@ -7,3 +7,19 @@
   display: flex;
   flex-direction: column;
 }
+
+.camera-selezionata {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  h3 {
+    text-align: center;
+  }
+}
+
+.button-prenota {
+  button {
+    width: 100%;
+  }
+}

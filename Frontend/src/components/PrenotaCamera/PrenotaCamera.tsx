@@ -18,6 +18,16 @@ function PrenotaCamera() {
   const [dateCheckout, setDateCheckout] = useState("");
   const [camereDisponibili, setCamereDisponibili] = useState<Camera[]>([]);
   const [cameraSelezionata, setCameraSelezionata] = useState(null);
+  const [dettagliCamera, setDettagliCamera] = useState({
+    ID_Camera: "N/D",
+    Tariffa: "N/D",
+    Numero_letti: "N/D",
+  });
+
+  const handleSelectCamera = (camera: Camera) => {
+    setDettagliCamera(camera);
+    setCameraSelezionata(camera.ID_Camera);
+  };
 
   const handleCheckinDateChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -30,8 +40,14 @@ function PrenotaCamera() {
     setDateCheckout(event.target.value);
   };
 
-  const handlePrenotaClick = (ID_Camera: string) => {
-    // Funzione per prenotare una stanza
+  const handlePrenotaClick = () => {
+    if (cameraSelezionata) {
+      // Effettua la prenotazione utilizzando l'ID della camera selezionata
+      // Esegui la logica per effettuare la prenotazione...
+      console.log("Camera selezionata:", cameraSelezionata);
+    } else {
+      console.log("Seleziona prima una camera.");
+    }
   };
 
   const cercaCamereDisponibili = () => {
@@ -78,9 +94,23 @@ function PrenotaCamera() {
             letti {camera.Numero_letti} - Servizi inclusi{" "}
             {camera.Servizi_inclusi} - Tariffa {camera.Tariffa} - Disponibilità{" "}
             {camera.Disponibilità}
+            <button onClick={() => handleSelectCamera(camera)}></button>
           </li>
         ))}
       </ul>
+      <div className="camera-selezionata">
+        <h3>Camera selezionata:</h3>
+        {dettagliCamera && (
+          <div>
+            <p>ID: {dettagliCamera.ID_Camera}</p>
+            <p>Prezzo: {dettagliCamera.Tariffa}</p>
+            <p>Posti letto: {dettagliCamera.Numero_letti}</p>
+          </div>
+        )}
+      </div>
+      <div className="button-prenota">
+        <button onClick={handlePrenotaClick}>Prenota</button>
+      </div>
     </div>
   );
 }
