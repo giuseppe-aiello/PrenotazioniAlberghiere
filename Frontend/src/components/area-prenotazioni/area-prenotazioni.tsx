@@ -32,7 +32,13 @@ function AreaPrenotazioni() {
         >
           Prenotazioni Effettuate
         </button>
-        <button>Prenota Camera</button>
+        <button
+          onClick={() => {
+            navigate("/prenota");
+          }}
+        >
+          Prenota Camera
+        </button>
       </div>
     </div>
   );

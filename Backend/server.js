@@ -155,6 +155,38 @@ app.post("/prenotazioni", (req, res) => {
     res.json(data);
   });
 });
+app.get("/stanze-disponibili", (req, res) => {
+  const dataCheckin = req.query.dataCheckin;
+  const dataCheckout = req.query.dataCheckout;
+  if (!dataCheckin || !dataCheckout) {
+    return res.status(401).json({ error: "Data invalida" });
+  }
+  const sql = //checkin                                //checkout
+    "SELECT DISTINCT c.* FROM Camera c JOIN Prenotazione p ON c.ID_Camera = p.ID_Camera WHERE NOT EXISTS (SELECT * FROM Prenotazione p2 WHERE p2.ID_Camera = c.ID_Camera AND (p2.Data_checkin <= ? AND p2.Data_checkout >= ? OR p2.Data_checkin <= ? AND p2.Data_checkout >= ? OR p2.Data_checkin >= ? AND p2.Data_checkout <= ?));";
+  db.query(
+    sql,
+    [
+      dataCheckin,
+      dataCheckout,
+      dataCheckin,
+      dataCheckout,
+      dataCheckin,
+      dataCheckout,
+    ],
+    (err, data) => {
+      if (err) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
+      if (data.length === 0) {
+        return res
+          .status(401)
+          .json({ error: "Camere non disponibili per quella data" });
+      }
+      res.json(data);
+    }
+  );
+});
+
 //port
 app.listen(8081, () => {
   console.log("Listening...");

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 interface Prenotazione {
   ID_Prenotazione: string;
   Data_checkin: string;
@@ -29,18 +30,31 @@ function PrenotazioneEffettuate() {
     }
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <div>
-      <h1>Prenotazioni Effettuate</h1>
-      <ul>
-        {prenotazioni.map((prenotazione) => (
-          <li key={prenotazione.ID_Prenotazione}>
-            {prenotazione.ID_Prenotazione} - {prenotazione.Data_checkin} -{" "}
-            {prenotazione.Data_checkout} - {prenotazione.ID_Cliente} -{" "}
-            {prenotazione.ID_Camera}
-          </li>
-        ))}
-      </ul>
+      <div className="main-box">
+        <h1>Prenotazioni Effettuate</h1>
+
+        <ul className="list">
+          {prenotazioni.map((prenotazione) => (
+            <li key={prenotazione.ID_Prenotazione}>
+              {prenotazione.ID_Prenotazione} - {prenotazione.Data_checkin} -{" "}
+              {prenotazione.Data_checkout} - {prenotazione.ID_Cliente} -{" "}
+              {prenotazione.ID_Camera}
+            </li>
+          ))}
+        </ul>
+        <button
+          style={{ backgroundColor: "red" }}
+          onClick={() => {
+            navigate("/area-prenotazioni");
+          }}
+        >
+          Torna indietro
+        </button>
+      </div>
     </div>
   );
 }

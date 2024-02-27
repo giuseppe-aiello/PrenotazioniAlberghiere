@@ -14,7 +14,6 @@ function Login() {
     axios
       .post("http://localhost:8081/login", { email, password })
       .then((res) => {
-        console.log(res.data);
         localStorage.setItem("token", JSON.stringify(res.data));
         if (!res.data.ID_Cliente) {
           NotificationHandler.instance.error(res.data);
