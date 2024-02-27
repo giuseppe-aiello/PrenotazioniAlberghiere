@@ -187,6 +187,26 @@ app.get("/stanze-disponibili", (req, res) => {
   );
 });
 
+app.post("/prenota", (req, res) => {
+  const sql =
+    "INSERT INTO Prenotazione (Data_checkin, Data_checkout, ID_Cliente, ID_Camera) VALUES (?, ?, ?, ?)";
+  db.query(
+    sql,
+    [
+      req.body.dateCheckin,
+      req.body.dateCheckout,
+      req.body.user.ID_Cliente,
+      req.body.cameraSelezionata,
+    ],
+    (err, data) => {
+      if (err) {
+        return res.status(401).json(err, "Errore di prenotazione");
+      }
+    }
+  );
+  res.status(200).send();
+});
+
 //port
 app.listen(8081, () => {
   console.log("Listening...");

@@ -1,6 +1,11 @@
+.box-with-title {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .login-box {
   width: 300px;
-  margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -43,7 +48,6 @@
 
 .no-sign {
   text-decoration: none;
-  margin-top: 1rem;
   text-align: center;
   display: block;
 }

@@ -17,7 +17,6 @@ function PrenotazioneEffettuate() {
     const userString = localStorage.getItem("token");
     if (userString) {
       const user = JSON.parse(userString);
-      console.log(user.Email);
 
       axios
         .post("http://localhost:8081/prenotazioni", user)
@@ -33,28 +32,46 @@ function PrenotazioneEffettuate() {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <div className="main-box">
-        <h1>Prenotazioni Effettuate</h1>
-
-        <ul className="list">
+    <div className="main-box">
+      <h1>Prenotazioni Effettuate</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>ID Prenotazione</th>
+            <th>Data Check-in</th>
+            <th>Data Check-out</th>
+            <th>ID Cliente</th>
+            <th>ID Camera</th>
+          </tr>
+        </thead>
+        <tbody>
           {prenotazioni.map((prenotazione) => (
-            <li key={prenotazione.ID_Prenotazione}>
-              {prenotazione.ID_Prenotazione} - {prenotazione.Data_checkin} -{" "}
-              {prenotazione.Data_checkout} - {prenotazione.ID_Cliente} -{" "}
-              {prenotazione.ID_Camera}
-            </li>
+            <tr key={prenotazione.ID_Prenotazione}>
+              <td>{prenotazione.ID_Prenotazione}</td>
+              <td>
+                {new Date(prenotazione.Data_checkin).toLocaleDateString(
+                  "en-GB"
+                )}
+              </td>
+              <td>
+                {new Date(prenotazione.Data_checkout).toLocaleDateString(
+                  "en-GB"
+                )}
+              </td>
+              <td>{prenotazione.ID_Cliente}</td>
+              <td>{prenotazione.ID_Camera}</td>
+            </tr>
           ))}
-        </ul>
-        <button
-          style={{ backgroundColor: "red" }}
-          onClick={() => {
-            navigate("/area-prenotazioni");
-          }}
-        >
-          Torna indietro
-        </button>
-      </div>
+        </tbody>
+      </table>
+      <button
+        style={{ backgroundColor: "red" }}
+        onClick={() => {
+          navigate("/area-prenotazioni");
+        }}
+      >
+        Torna indietro
+      </button>
     </div>
   );
 }

@@ -31,6 +31,7 @@ const App = () => {
           element={<PrenotazioniEffettuate />}
         />
         <Route path="/prenota" element={<PrenotaCamera />} />
+        <Route path="/success" element={<>Prenotazione effettuata</>} />
       </Routes>
       <ToastContainer />
     </BrowserRouter>

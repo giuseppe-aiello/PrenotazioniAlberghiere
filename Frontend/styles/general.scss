@@ -1,7 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
-  height: 100vh; /* Imposta l'altezza del body al 100% della finestra del browser */
+  min-height: 100vh; /* Imposta l'altezza del body al 100% della finestra del browser */
   display: flex;
   justify-content: center; /* Centra orizzontalmente */
   align-items: center; /* Centra verticalmente */
@@ -39,5 +45,8 @@ button {
 }
 
 h1 {
+  text-align: center;
+}
+h3 {
   text-align: center;
 }

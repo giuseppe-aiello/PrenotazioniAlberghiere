@@ -24,6 +24,7 @@ function AreaPrenotazioni() {
   return (
     <div className="main-box">
       <h1>Area Prenotazioni</h1>
+
       <div className="choice-box">
         <button
           onClick={() => {
@@ -40,6 +41,14 @@ function AreaPrenotazioni() {
           Prenota Camera
         </button>
       </div>
+      <button
+        style={{ backgroundColor: "red" }}
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Logout
+      </button>
     </div>
   );
 }

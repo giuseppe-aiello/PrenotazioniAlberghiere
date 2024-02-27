@@ -16,7 +16,19 @@ interface Camera {
 function PrenotaCamera() {
   const [dateCheckin, setDateCheckin] = useState("");
   const [dateCheckout, setDateCheckout] = useState("");
-  const [camereDisponibili, setCamereDisponibili] = useState<Camera[]>([]);
+  const [camereDisponibili, setCamereDisponibili] = useState<Camera[]>([
+    {
+      ID_Camera: "N/D",
+      Tipo_camera: "N/D",
+      Numero_letti: "N/D",
+      Servizi_inclusi: "N/D",
+      Tariffa: "N/D",
+      Disponibilità: "N/D",
+    },
+  ]);
+
+  const navigate = useNavigate();
+
   const [cameraSelezionata, setCameraSelezionata] = useState(null);
   const [dettagliCamera, setDettagliCamera] = useState({
     ID_Camera: "N/D",
@@ -41,17 +53,40 @@ function PrenotaCamera() {
   };
 
   const handlePrenotaClick = () => {
+    console.log("caiooopooo");
+
+    console.log(cameraSelezionata);
     if (cameraSelezionata) {
+      const userString = localStorage.getItem("token");
+      if (userString) {
+        const user = JSON.parse(userString);
+
+        axios
+          .post("http://localhost:8081/prenota", {
+            user,
+            dateCheckin,
+            dateCheckout,
+            cameraSelezionata,
+          })
+          .then(() => {
+            console.log("CIAOOOOO");
+            navigate("/success");
+          })
+          .catch((err) => {
+            console.log("CIAOOOOO");
+            NotificationHandler.instance.error(err.response.data.error);
+          });
+      }
+
       // Effettua la prenotazione utilizzando l'ID della camera selezionata
       // Esegui la logica per effettuare la prenotazione...
       console.log("Camera selezionata:", cameraSelezionata);
     } else {
-      console.log("Seleziona prima una camera.");
+      NotificationHandler.instance.error("Seleziona prima una camera.");
     }
   };
 
   const cercaCamereDisponibili = () => {
-    console.log(dateCheckin);
     axios
       .get(
         `http://localhost:8081/stanze-disponibili?dataCheckin=${dateCheckin}&dataCheckout=${dateCheckout}`
@@ -71,30 +106,37 @@ function PrenotaCamera() {
 
   return (
     <div className="prenota-ora">
-      <h1>Prenotazione Stanze</h1>
-      <label className="seleziona-date">
-        Seleziona la data di checkin:
-        <input
-          type="date"
-          value={dateCheckin}
-          onChange={handleCheckinDateChange}
-        />
-        Seleziona la data di checkout:
-        <input
-          type="date"
-          value={dateCheckout}
-          onChange={handleCheckoutDateChange}
-        />
-      </label>
-      <button onClick={cercaCamereDisponibili}>Cerca camere</button>
+      <div className="seleziona-date-box">
+        <h1>Prenotazione Stanze</h1>
+        <label className="seleziona-date">
+          Seleziona la data di checkin:
+          <input
+            type="date"
+            value={dateCheckin}
+            onChange={handleCheckinDateChange}
+          />
+          Seleziona la data di checkout:
+          <input
+            type="date"
+            value={dateCheckout}
+            onChange={handleCheckoutDateChange}
+          />
+        </label>
+        <button onClick={cercaCamereDisponibili}>Cerca camere</button>
+        <h3>Camere disponibili: </h3>
+      </div>
       <ul>
         {camereDisponibili.map((camera) => (
           <li key={camera.ID_Camera}>
             ID camera {camera.ID_Camera} - Tipo {camera.Tipo_camera} - Numero
             letti {camera.Numero_letti} - Servizi inclusi{" "}
-            {camera.Servizi_inclusi} - Tariffa {camera.Tariffa} - Disponibilità{" "}
-            {camera.Disponibilità}
-            <button onClick={() => handleSelectCamera(camera)}></button>
+            {camera.Servizi_inclusi} - Tariffa {camera.Tariffa}
+            <button
+              style={{ backgroundColor: "#32cd32" }}
+              onClick={() => handleSelectCamera(camera)}
+            >
+              Seleziona
+            </button>
           </li>
         ))}
       </ul>
@@ -107,9 +149,15 @@ function PrenotaCamera() {
             <p>Posti letto: {dettagliCamera.Numero_letti}</p>
           </div>
         )}
-      </div>
-      <div className="button-prenota">
         <button onClick={handlePrenotaClick}>Prenota</button>
+        <button
+          style={{ backgroundColor: "red" }}
+          onClick={() => {
+            navigate("/area-prenotazioni");
+          }}
+        >
+          Torna indietro
+        </button>
       </div>
     </div>
   );

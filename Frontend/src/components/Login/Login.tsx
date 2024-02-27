@@ -53,8 +53,9 @@ function Login() {
   }, [redirectToAreaPrenotazioni]);
 
   return (
-    <div>
+    <div className="box-with-title">
       <h1>Prenotazioni Alberghiere</h1>
+
       <div className="login-box">
         <form
           onSubmit={(e) => {
