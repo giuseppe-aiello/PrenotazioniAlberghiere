@@ -6,6 +6,7 @@ import Register from "./components/Register/Register";
 import AreaPrenotazioni from "./components/area-prenotazioni/area-prenotazioni";
 import PrenotazioniEffettuate from "./components/prenotazioni-effettuate/prenotazioni-effettuate";
 import PrenotaCamera from "./components/PrenotaCamera/PrenotaCamera";
+import Success from "./components/Success/Success";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -31,7 +32,7 @@ const App = () => {
           element={<PrenotazioniEffettuate />}
         />
         <Route path="/prenota" element={<PrenotaCamera />} />
-        <Route path="/success" element={<>Prenotazione effettuata</>} />
+        <Route path="/success/:id" element={<Success />} />
       </Routes>
       <ToastContainer />
     </BrowserRouter>

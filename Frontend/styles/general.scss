@@ -50,3 +50,17 @@ h1 {
 h3 {
   text-align: center;
 }
+
+.back-button {
+  padding: 10px 20px;
+  background-color: red;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block; /* Imposta gli elementi come blocchi in linea */
+
+  &:hover {
+    background-color: darkred;
+  }
+}

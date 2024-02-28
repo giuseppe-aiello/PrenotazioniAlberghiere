@@ -158,7 +158,7 @@ app.post("/prenotazioni", (req, res) => {
 app.get("/stanze-disponibili", (req, res) => {
   const dataCheckin = req.query.dataCheckin;
   const dataCheckout = req.query.dataCheckout;
-  if (!dataCheckin || !dataCheckout) {
+  if (!dataCheckin || !dataCheckout || dataCheckin > dataCheckout) {
     return res.status(401).json({ error: "Data invalida" });
   }
   const sql = //checkin                                //checkout

@@ -42,7 +42,7 @@ function AreaPrenotazioni() {
         </button>
       </div>
       <button
-        style={{ backgroundColor: "red" }}
+        className="back-button"
         onClick={() => {
           navigate("/");
         }}

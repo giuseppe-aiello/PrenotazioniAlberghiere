@@ -65,7 +65,7 @@ function PrenotazioneEffettuate() {
         </tbody>
       </table>
       <button
-        style={{ backgroundColor: "red" }}
+        className="back-button"
         onClick={() => {
           navigate("/area-prenotazioni");
         }}

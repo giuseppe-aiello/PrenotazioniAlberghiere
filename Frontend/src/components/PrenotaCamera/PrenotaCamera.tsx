@@ -53,8 +53,6 @@ function PrenotaCamera() {
   };
 
   const handlePrenotaClick = () => {
-    console.log("caiooopooo");
-
     console.log(cameraSelezionata);
     if (cameraSelezionata) {
       const userString = localStorage.getItem("token");
@@ -69,17 +67,13 @@ function PrenotaCamera() {
             cameraSelezionata,
           })
           .then(() => {
-            console.log("CIAOOOOO");
-            navigate("/success");
+            navigate("/success/" + cameraSelezionata);
           })
           .catch((err) => {
-            console.log("CIAOOOOO");
             NotificationHandler.instance.error(err.response.data.error);
           });
       }
 
-      // Effettua la prenotazione utilizzando l'ID della camera selezionata
-      // Esegui la logica per effettuare la prenotazione...
       console.log("Camera selezionata:", cameraSelezionata);
     } else {
       NotificationHandler.instance.error("Seleziona prima una camera.");
@@ -132,7 +126,7 @@ function PrenotaCamera() {
             letti {camera.Numero_letti} - Servizi inclusi{" "}
             {camera.Servizi_inclusi} - Tariffa {camera.Tariffa}
             <button
-              style={{ backgroundColor: "#32cd32" }}
+              className="select-button"
               onClick={() => handleSelectCamera(camera)}
             >
               Seleziona
@@ -151,7 +145,7 @@ function PrenotaCamera() {
         )}
         <button onClick={handlePrenotaClick}>Prenota</button>
         <button
-          style={{ backgroundColor: "red" }}
+          className="back-button"
           onClick={() => {
             navigate("/area-prenotazioni");
           }}
