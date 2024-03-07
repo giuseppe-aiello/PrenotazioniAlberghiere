@@ -1,0 +1,463 @@
+Sistema di Prenotazioni alberghiere:
+Creare un sistema di gestione delle prenotazioni per un hotel. Il database dovrebbe
+gestire camere, prenotazioni, clienti e pagamenti. Includere funzionalità di ricerca
+delle disponibilità e generazione di fatture.
+Sistema di prenotazioni alberghiere
+Funzionalità richieste:
+Gestione delle camere:
+Il sistema deve consentire al possibile cliente di inserire, modificare e cancellare una prenotazione e visualizzare informazioni relative alle camere dell'hotel, inclusi dettagli come tipo di camera, numero di letti, servizi inclusi (WiFi, TV via cavo, minibar, ecc.), tariffe standard e disponibilità.
+Il sistema deve visualizzare lo stato di occupazione delle camere in tempo reale, consentendo al cliente di effettuare una prenotazione.
+Gestione delle prenotazioni:
+Gli utenti (clienti) devono essere in grado di registrarsi attraverso una schermata di login e di prenotare una camera specifica per un determinato periodo di tempo, inserendo le informazioni personali richieste (nome, cognome, numero di telefono, e-mail, ecc.).
+Il sistema deve verificare la disponibilità della camera richiesta per le date specificate e confermare la prenotazione all'utente.
+Il sistema deve consentire la modifica delle prenotazioni esistenti (ad esempio aggiungere o rimuovere servizi extra, ecc.) prima della data di arrivo prevista (Data_checkin).
+Gli utenti devono poter visualizzare lo storico delle loro prenotazioni tramite il sistema.
+Gestione dei clienti:
+Il sistema deve consentire ai nuovi clienti di registrarsi nel database, inserendo informazioni personali come nome, cognome, indirizzo, e-mail, numero di telefono, nazionalità, data di nascita, ecc.
+Gestione dei pagamenti:
+Il sistema deve calcolare automaticamente il costo totale della prenotazione, inclusi eventuali servizi extra richiesti, tariffa delle camere
+Deve essere possibile emettere fatture dettagliate per le prenotazioni completate e inviarle agli utenti via e-mail o stamparle.
+Deve essere possibile registrare i pagamenti effettuati e tenere traccia dello stato dei pagamenti per ogni prenotazione (Fatture).
+Attore principale del sistema:
+Cliente:
+Può accedere al sistema per prenotare camere e visualizzare le informazioni sulle sue prenotazioni e i pagamenti effettuati.
+Azioni principali:
+Prenotazione di una camera:
+Un cliente seleziona tra le date disponibili la camera libera e effettua la prenotazione.
+Il cliente riceve una conferma della prenotazione tramite e-mail o SMS.
+Modifica di una prenotazione:
+Un cliente richiede una modifica alla sua prenotazione esistente (aggiunta di servizi extra).
+Il dipendente verifica la disponibilità e apporta le modifiche necessarie nel sistema.
+Viene emessa una conferma delle modifiche al cliente.
+Cancellazione di una prenotazione:
+Un cliente richiede la cancellazione di una prenotazione esistente.
+Una volta annullata la prenotazione, il sistema aggiorna la disponibilià nel calendario delle prenotazioni.
+Generazione di una fattura:
+Una volta effettuata la prenotazione, il sistema genera una fattura dettagliata per il cliente, includendo tutti i costi relativi alla prenotazione e ai servizi aggiuntivi.
+
+Analisi dei requisiti
+Termine
+Descrizione
+Sinonimi
+Termini Collegati
+Camere
+Rappresenta le stanze dell'hotel, ciascuna con attributi come tipo, numero di letti, servizi inclusi, tariffe e disponibilità.
+Stanze
+Tipo camera, Letti, Servizi inclusi, Tariffe, Disponibilità
+Prenotazioni
+Rappresenta le prenotazioni fatte dai clienti per le camere dell'hotel, contenente informazioni come date di checkin e di checkout.
+Prenotazioni camere
+Prenotazione, Booking, Riservazione, Check-in, Check-out, Dettagli prenotazione
+Clienti
+Rappresenta le persone che effettuano le prenotazioni delle camere dell'hotel, con attributi come nome, cognome, contatti e altre informazioni personali.
+Ospiti, Utenti
+Anagrafica clienti, Dati personali clienti, Informazioni contatto
+Fatture
+Rappresenta le fatture generate per le prenotazioni effettuate dai clienti, con attributi come ID della fattura, data di emissione e totale.
+Pagamenti
+ID_Fattura, Data_emissione, Totale,
+
+Dati di carattere generale
+Nel sistema di gestione delle prenotazioni alberghiere, sono presenti diverse entità che raccolgono e organizzano i dati relativi all'hotel e ai suoi clienti. 
+
+Tra queste entità, troviamo le "Camere", che rappresentano le diverse unità abitative dell'hotel. Ogni camera è identificata da un ID univoco e ha attributi come il tipo di camera (singola, doppia, suite), il numero di letti, i servizi inclusi (come WiFi, TV via cavo, minibar), la tariffa e la disponibilità.
+
+Le "Prenotazioni" costituiscono un'altra entità chiave nel sistema, raccogliendo le informazioni relative alle richieste di prenotazione fatte dai clienti. Ogni prenotazione è identificata da un ID univoco e contiene dettagli come la data di check-in e check-out prevista, l'ID del cliente che ha effettuato la prenotazione e l'ID della camera prenotata. Inoltre, per gestire il processo di fatturazione, ogni prenotazione è associata a un'entità "Fatture", che contiene informazioni come l'ID della fattura, la data di emissione e il totale e l’id della prenotazione.
+
+I "Clienti" costituiscono un'altra entità importante nel sistema, rappresentando le persone che effettuano le prenotazioni delle camere dell'hotel. Ogni cliente è identificato da un ID univoco e ha attributi come nome, cognome, indirizzo, numero di telefono, email, nazionalità e data di nascita.
+
+* Login sull’interfaccia Web *
+All’interno della tabella Cliente verrà memorizzato anche l’attributo password, una sequenza di caratteri protetta da una funzione hash lato server che servirà a far entrare I clienti nell’area utenti del sito.
+
+Motivo per cui ho deciso mantenere un entità Fattura e non inglobarla su prenotazione:
+Tracciabilità e registrazione: Mantenere un'entità Fattura consente di tenere traccia delle transazioni finanziarie e di registrare i pagamenti dei clienti. Questo può essere importante per fini contabili.
+Separazione delle responsabilità: Separare le informazioni sulla prenotazione (come le date di check-in e check-out, il tipo di camera, i servizi richiesti) dalle informazioni finanziarie (come il totale della fattura, i dettagli dei pagamenti) può semplificare la gestione e la manutenzione del sistema e le varie operazioni.
+
+Schema Logico attuale:
+Camera (ID_Camera, Tipo_camera, Numero_letti, Servizi_inclusi, Tariffa, Disponibilità)
+  - PK: ID_Camera
+Prenotazione (ID_Prenotazione, Data_checkin, Data_checkout, ID_Cliente, ID_Camera)
+  - PK: ID_Prenotazione
+  - FK: ID_Cliente REFERENCES Clienti(ID_Cliente)
+  - FK: ID_Camera REFERENCES Camere(ID_Camera)
+Cliente (ID_Cliente, Nome, Cognome, Indirizzo, Numero_telefono, Email, Nazionalità, Data_nascita, Password )
+  - PK: ID_Cliente
+Fatture (ID_Fattura, Data_emissione, Totale, ID_Prenotazione)
+  - PK: ID_Fattura
+  - FK: ID_Prenotazione REFERENCES Prenotazioni(ID_Prenotazione)
+
+
+
+
+
+
+
+Schema Scheletro
+
+Schema Completo
+
+
+
+Descrizione delle relazioni
+Associa (Prenotazione, Camera):
+Questa relazione indica l'associazione tra ogni prenotazione effettuata e la camera specifica che è stata prenotata per quella prenotazione.
+Assegnazione delle Camere: La relazione "Associa" consente al sistema di assegnare correttamente una camera a ciascuna prenotazione.
+Tracciamento delle Prenotazioni: Utilizzando questa relazione, il sistema può tracciare facilmente quale camera è stata prenotata per ogni prenotazione. Questo consente di gestire efficacemente l'occupazione delle camere e di assicurarsi che non ci siano sovrapposizioni o conflitti nelle prenotazioni.
+Gestione delle Disponibilità: La relazione "Associa" aiuta il sistema a tenere traccia della disponibilità delle camere per le date desiderate. Quando una camera è associata a una prenotazione, il sistema la considera come non disponibile durante la ricerca di altre prenotazioni per le stesse date (Vedremo nella fase di interfaccia web) 
+
+Genera (Prenotazione, Fattura):
+Questa relazione indica che ogni prenotazione effettuata genera una fattura corrispondente:
+Registro delle Transazioni: La relazione "Genera" consente al sistema di registrare ogni transazione relativa alle prenotazioni effettuate. Quando un cliente effettua una prenotazione, il sistema utilizza questa relazione per generare automaticamente una fattura che documenta la prenotazione e i relativi dettagli finanziari.
+Tracciamento dei Pagamenti: Utilizzando questa relazione, il sistema può tenere traccia dei pagamenti relativi alle prenotazioni. Ogni fattura generata contiene le informazioni necessarie per il pagamento, come il totale da pagare.
+Gestione della Contabilità: La relazione "Genera" aiuta il sistema a gestire la contabilità dell'hotel registrando tutte le transazioni relative alle prenotazioni. Questo consente agli amministratori di monitorare i flussi di denaro e di mantenere una registrazione accurata dei guadagni generati dalle prenotazioni.
+
+Effettua (Cliente, Prenotazione)
+Identificazione del Cliente: La relazione "Effettua" consente di identificare il cliente che ha effettuato una determinata prenotazione. Quando un cliente decide di prenotare una camera presso l'hotel, questa relazione collega direttamente il cliente alla sua prenotazione.
+Registro delle Prenotazioni dei Clienti: Utilizzando questa relazione, il sistema registra le prenotazioni effettuate da ciascun cliente. Questo permette all'hotel di mantenere un registro completo delle attività di prenotazione di ciascun cliente nel tempo.
+
+Ricerca delle disponibilità
+Associo alla progettazione del database la creazione di interfaccia web.
+Caratteristiche:
+Interfaccia utente user-friendly: un'interfaccia utente semplice e intuitiva che consenta all'utente di inserire le date desiderate per il check-in e il check-out ed altri eventuali requisiti specifici.
+Ricerca delle camere disponibili: Una volta inseriti i criteri di ricerca, il sistema dovrebbe eseguire una query nel database per cercare le camere disponibili per le date specificate. Le camere disponibili sono quelle che non sono prenotate per le date desiderate.
+Visualizzazione dei risultati: Mostra all'utente i risultati della ricerca in modo chiaro e dettagliato. Puoi mostrare una lista delle camere disponibili insieme alle relative informazioni, come il tipo di camera, il numero di letti, i servizi inclusi e il prezzo per notte. 
+Filtri e opzioni di ordinamento: Offri agli utenti la possibilità di filtrare i risultati della ricerca in base ai loro criteri preferiti, come il prezzo, la valutazione degli ospiti, la distanza dalle attrazioni locali, ecc. Inoltre, fornisci opzioni di ordinamento per permettere agli utenti di visualizzare i risultati in base alle loro preferenze.
+In alternativa, l’utente può visualizzare il calendario delle prenotazioni associato a una camera, per visionare velocemente le date disponibili.
+Calendario interattivo: Include un calendario interattivo che consenta agli utenti di selezionare facilmente le date desiderate per il check-in e il check-out. Questo rende più semplice per gli utenti visualizzare la disponibilità delle camere per date specifiche e effettuare le loro prenotazioni.
+Feedback in tempo reale: Aggiorna i risultati della ricerca in tempo reale mentre gli utenti modificano i criteri di ricerca o le date desiderate. 
+All’interno del sito è possibile anche visualizzare lo storico delle prenotazioni.
+
+Query per selezionare le camere disponibili compatibili con le date di checkin e checkout fornite dall’utente tramite interfaccia web:    "SELECT DISTINCT c.* FROM Camera c JOIN Prenotazione p ON c.ID_Camera = p.ID_Camera WHERE NOT EXISTS (SELECT * FROM Prenotazione p2 WHERE p2.ID_Camera = c.ID_Camera AND (p2.Data_checkin <= dataCheckin AND p2.Data_checkout >= dataCheckout OR p2.Data_checkin <= dataCheckin AND p2.Data_checkout >= dataCheckout OR p2.Data_checkin >= dataCheckin AND p2.Data_checkout <= dataCheckout));";
+Generazione delle fatture
+La generazione delle fatture viene eseguita automaticamente alla creazione di una nuova prenotazione con l’utilizzo di un Trigger: CREATE TRIGGER Genera_Fattura_Prenotazione
+AFTER INSERT ON Prenotazione
+FOR EACH ROW
+BEGIN
+    DECLARE total DECIMAL(10, 2);
+    DECLARE tariffa_selezionata DECIMAL(10, 2);
+    SELECT Tariffa INTO tariffa_selezionata
+    FROM Camera 
+    WHERE ID_Camera = new.ID_Camera;
+   IF tariffa_selezionata IS NULL THEN
+        -- Log o messaggio di errore
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Errore: tariffa della camera non trovata per la prenotazione';
+    END IF;
+    SET total = tariffa_selezionata;
+    INSERT INTO Fattura (Data_emissione, Totale, ID_Prenotazione)
+    VALUES (CURRENT_TIMESTAMP, total, NEW.ID_Prenotazione);
+END;
+
+Vincoli non esprimibili con E-R
+Vincolo di Unicità delle Prenotazioni: non vi sono sovrapposizioni nelle date delle prenotazioni per una determinata camera. Ogni prenotazione si riferisce a una camera non occupata.
+Vincolo di Intervallo di Prenotazione: Prima di ogni prenotazione, per poter essere effettivamente usata la stanza deve essere pulita e pronta a nuovi clienti.
+Vincolo di Capacità della Struttura: Se tutte le stanze sono occupate non è più possibile effettuare prenotazioni per I giorni compresi fino alla svuotamento di una stanza.
+
+Porzione del dizionario dati - Entità
+Entità
+Descrizione
+Attributi
+Identificatore
+CLIENTE
+Rappresenta i clienti che effettuano le prenotazioni.
+ID_Cliente (PK), Nome, Cognome, Email, Telefono, Password
+ID_Cliente
+CAMERA
+Rappresenta le camere dell'hotel disponibili per la prenotazione.
+ID_Camera (PK), Numero_Camera, Tipo, Prezzo, Disponibilità
+ID_Camera
+PRENOTAZIONE
+Rappresenta le prenotazioni effettuate dai clienti.
+ID_Prenotazione (PK), Data_Inizio, Data_Fine, ID_Cliente (FK), ID_Camera (FK)
+ID_Prenotazione
+FATTURA
+Rappresenta le fatture generate per le prenotazioni.
+ID_Fattura (PK), Data_Emissione, Totale, ID_Prenotazione (FK)
+ID_Fattura
+
+Porzione del dizionario dati - Relazione
+Relazione
+Entità partecipanti
+Descrizione
+Attributi
+Effettua
+CLIENTE, PRENOTAZIONI
+Rappresenta la prenotazione effettuata da un cliente.
+-
+Assegna
+CAMERE, PRENOTAZIONI
+Rappresenta l'assegnazione di una camera a una prenotazione.
+-
+Genera
+PRENOTAZIONI, FATTURE
+Rappresenta la generazione di una fattura per una prenotazione.
+-
+
+
+Specifiche sulle operazione
+O1: Introduci un nuovo cliente
+Descrizione: Registrazione di un nuovo cliente sul database.
+Carico previsto: 50 operazioni al giorno.
+O2: Modifica cliente
+Descrizione: Cambio password o altre informazioni del cliente.
+Carico previsto: 10 operazioni al giorno.
+O3: Prenota camera (Aggiungi prenotazione)
+Descrizione: Verifica la disponibilità delle camere per una certa data e prenota una camera per il cliente.
+Carico previsto: 50 operazioni al giorno.
+O4: Modifica prenotazione
+Descrizione: Modifica una prenotazione esistente nel sistema.
+Carico previsto: 10 operazioni al giorno.
+O5: Genera una fattura per un cliente
+Descrizione: Crea una fattura per il cliente basata sulla prenotazione effettuata e i servizi aggiuntivi.
+Carico previsto: 50 operazioni al giorno.
+O6: Modifica delle tariffe delle camere 
+Descrizione: Modifica i prezzi delle camere in base a variazioni stagionali o di domanda.
+Carico previsto: 10 operazioni al mese.
+O7: Produci totale sulle prenotazioni in un mese
+Descrizione: totale numero prenotazioni in un mese.
+Carico previsto: 1 operazione al mese.
+O8: Leggi l’importo totale delle fatture emesse ogni mezza giornata
+Descrizione: Calcola importo totale delle fatture emesse in un mese
+Carico previsto: 2 operazione al giorno
+O9: Produci una statistica sul tasso di occupazione delle camere nei vari mesi dell’anno
+Descrizione: Genera un rapporto che mostra il tasso di occupazione delle camere nel corso di un anno (ogni mese viene aggiornato), potendo vedere le camere e tipi di camere più prenotate.
+Carico previsto: 1 operazione al mese.
+O10: Fornisci il fatturato totale dei servizi aggiuntivi esterni.
+Descrizione: Ricava il totale del fatturato dei servizi esterni (relativi alle società in collaborazione con l’hotel) forniti ai clienti.
+Carico previsto: 1 operazione al mese.
+
+
+Porzione della tavola dei volumi
+Concetto
+Tipo
+Volume
+Cliente
+Entità
+1500
+Camera
+Entità
+200
+Prenotazione
+Entità
+2000
+ServizioAggiuntivo
+Entità
+50
+Fattura
+Entità
+2000
+
+Tabella delle frequenze
+Operazione
+Descrizione
+Frequenza
+Tipo
+O1: IntroduciCliente
+Introdurre un nuovo cliente nel sistema
+50 al giorno
+I
+O2: ModificaCliente
+Modificare i dati di un cliente già registrato nel sistema
+10 al giorno
+I
+O3: PrenotaCamera
+Prenotare una camera tenendo conto delle disponibilità
+50 al giorno
+I
+O4: ModificaPrenotazione
+Modificare i dettagli di una prenotazione (orario/data, ecc.)
+10 al giorno
+I
+O5: ProduciFattura
+Generare una fattura per una prenotazione
+50 al giorno
+I
+O6: CambiaTariffe
+Cambiare i prezzi delle camere o dei servizi
+10 al mese
+I
+O7: TotalePrenotazioni
+Totale delle prenotazioni
+1 al mese
+B
+O8: TotaleFatture
+Calcolo importo totale fatture
+2 al giorno
+B
+O9: TassoOccupazione
+Preparare statistiche sulle prenotazioni per camera
+1 all’anno
+B
+10: ServiziEsterni
+Totale dei servizi esterni erogati in un mese
+1 al mese
+B
+
+Query sql delle operazioni:
+01:
+INSERT INTO Cliente (Nome, Cognome, Indirizzo, Numero_telefono, Email, Nazionalità, Data_nascita, Password) VALUES ('NuovoNome', 'NuovoCognome', 'NuovoIndirizzo', 'NuovoNumeroTelefono', 'nuovo@email.com', 'NuovaNazionalità', 'NuovaDataNascita', 'NuovaPassword');
+02: 
+UPDATE Cliente SET Nome = 'NuovoNome', Cognome = 'NuovoCognome', Indirizzo = 'NuovoIndirizzo', Numero_telefono = 'NuovoNumeroTelefono', Email = 'nuovo@email.com', Nazionalità = 'NuovaNazionalità', Data_nascita = 'NuovaDataNascita', Password = 'NuovaPassword' WHERE ID_Cliente = [ID_CLIENTE];
+03: 
+INSERT INTO Prenotazione (Data_checkin, Data_checkout, ID_Cliente, ID_Camera) VALUES ('DataCheckin', 'DataCheckout', [ID_CLIENTE], [ID_CAMERA]);
+04:
+UPDATE Prenotazione SET Data_checkin = 'NuovaDataCheckin', Data_checkout = 'NuovaDataCheckout' WHERE ID_Prenotazione = [ID_PRENOTAZIONE];
+05: 
+INSERT INTO Fattura (Data_emissione, Totale, ID_Prenotazione) VALUES ('DataEmissione', Totale, [ID_PRENOTAZIONE]);
+Gestita automaticamente da un Trigger, vedi documento delle queries.
+06: 
+UPDATE Camera SET Tariffa = 'NuovaTariffa' WHERE ID_Camera = [ID_CAMERA];
+07:
+SELECT COUNT(*) AS TotalePrenotazioni FROM Prenotazione;
+08:
+SELECT SUM(Totale) AS ImportoTotaleFatture FROM Fattura;
+09:
+SELECT 
+    c.ID_Camera, 
+    c.Tipo_camera, 
+    COUNT(*) AS NumeroPrenotazioni, 
+    ROUND((COUNT(*) / (SELECT COUNT(*) FROM Prenotazione WHERE YEAR(Data_checkin) = YEAR(CURDATE()))) * 100, 2) AS TassoOccupazione
+FROM 
+    Prenotazione p
+JOIN 
+    Camera c ON p.ID_Camera = c.ID_Camera
+WHERE 
+    YEAR(p.Data_checkin) = YEAR(CURDATE()) 
+    AND YEAR(p.Data_checkout) = YEAR(CURDATE())
+    GROUP BY  c.ID_Camera, c.Tipo_camera;
+
+Questa query calcola il tasso di occupazione di una stanza durante l’anno attuale, quindi indica la percentuale delle prenotazioni su quella specifica camera rispetto al totale delle prenotazioni di tutte le camere durante l’anno.
+10: 
+SELECT SUM(sa.Costo) AS TotaleImportoServizi FROM PrenotazioneServizioAggiuntivo psa JOIN ServizioAggiuntivo sa ON psa.ID_ServizioAggiuntivo = sa.ID_ServizioAggiuntivo;
+--------------------------------------------------------------------------------------------------------------------
+Volendo approfondire e aumentare la complessità del progetto ho pensato di aggiungere un’entità servizi aggiuntivi . 
+I servizi aggiunti dell’hotel vanno al di là della camera prenotata, possono essere svariati e scelti dall’utente al momento della prenotazione.
+Questi servizi sono, ad esempio:
+Pranzi o cene nei ristoranti dell'hotel
+Servizio in camera
+Servizi di lavanderia
+Accesso a servizi spa o palestra
+Internet Wi-Fi
+Parcheggio
+Escursioni guidate o attività ricreative
+Questi servizi aggiuntivi possono essere selezionati o richiesti dai clienti durante il processo di prenotazione e vengono addebitati separatamente rispetto alle tariffe standard delle camere.
+Inoltre, esistono dei servizi che vengono erogati da società esterne (es. Escursioni guidate e altre attività ricreative), perciò si crea una gerarchia interna a ServizioAgg.
+Il nuovo schema E-R
+
+------------------------------------------------------------------------------------------------------------------
+Analisi delle ridondanze
+Valutazione del costo dell’attributo ridondante “Totale”
+L’attributo totale dell’entità Fattura è ridondante poichè può essere ricavato, per ogni prenotazione, sommando I costi relativi ai servizi aggiuntivi, se presenti, e il costo della tariffa della camera.
+Le operazioni che vengono coinvolte sono O8 e 05.
+Schema dell’operazione 08 e 05
+
+Con ridondanza:
+Ipotizzando che l’attributo Totale sia di tipo float (32 bit e quindi 4 byte per ogni occorrenza) l’utilizzo di questo dato richiederebbe 4*2000 byte, con un utilizzo di memoria di 8kb,
+- Con ridondanza per calcolare il totale dell’importo delle fatture emesse 2 volte al giorno basta leggere 50 volte x 2 volte al giorno su la tabella Fattura (08)
+- Ogni volta che si produce una fattura viene fatta 1 scrittura, quindi 50 volte al giorno (05)
+Descr
+E/R
+Numero accessi
+Tipo
+Fattura
+E
+1
+L
+Fattura
+E
+1
+S
+
+Stimando che alla prima lettura del giorno ci siano 25 fatture e alla seconda lettura ci siano 50 fatture ottengo:
+Per O8 abbiamo: 1L*(25+50)= 75 accessi al giorno
+(2 sono le volte, 25 le fatture in quel momento della giornata)
+Per 05: 1S*50 = 100 accessi al giorno
+Totale: 175 accessi al giorno
+
+Senza ridondanza: 
+Senza ridondanza per calcolare il totale dell’importo delle fatture emesse in un mese devi leggere fattura, poi leggere prenotazione, poi leggere tariffa su Camera e leggere in ServiziAggiuntivi dove vi sono (08)
+Calcolando che in media un cliente possiede 2 servizi aggiuntivi abbiamo:
+
+Descr
+E/R
+Numero accessi
+Tipo
+Fattura
+E
+1
+L
+Prenotazione
+E
+1
+L
+ServiziAgg
+E
+2
+L
+Camera
+E
+1
+L
+
+Stimando che alla prima lettura del giorno ci siano 25 fatture e alla seconda lettura ci siano 50 fatture ottengo:
+Per O8 abbiamo: 5L*(25+50)volte= 375 accessi al giorno
+Sta volta 05 non viene aggiornata perchè manca l’attributo Totale di Fattura.
+Totale: 375 accessi al giorni
+Conviene mantenere la ridondanza!
+Eliminazione delle gerarchie
+Nello schema è presenta un’unica gerarchia relativa ai servizi aggiuntivi che si divino in Esterni o Interni. Gli unici attributi che differenziano l’entità Servizi Esterni sono P.IVA e Società, e l’unica operazione che opera su di essa è O10. Queste due entità si accorpano per semplicità in unica ServizioAggiuntivo che manterrà l’attributo Società (nel caso di un servizio interno: l’Hotel in questione) e attributi P.IVA (nel caso di un servizio interno P.IVA dell’Hotel).
+
+Generazione delle fatture (aggiornato)
+Una volta aggiunta l’entità ServizioAggiuntivo, che offre la possibilità all’hotel di offrire servizi interni ed esterni ai proprio clienti, si deve aggiornare il sistema di generazione delle fatture e quindi il relativo trigger, di fatto, se il cliente ha aggiunto dei servizi aggiuntivi nella fase di prenotazione di una camera il totale complessivo della fattura deve essere compreso anche dei costi vari dei servizi aggiuntivi selezionati.
+Il trigger successivo, unito a quello iniziale (Genera_Fattura_Prenotazione), aggiorna la fattura anche in caso di aggiunta successiva alla creazione di un qualche servizio aggiuntivo:
+
+CREATE TRIGGER Modifica_Fattura_ServiziAgg
+AFTER INSERT ON PrenotazioneServizioAggiuntivo
+FOR EACH ROW
+BEGIN
+    DECLARE total DECIMAL(10, 2);
+    DECLARE costo_servizi DECIMAL(10, 2);
+    SELECT SUM(Costo) INTO costo_servizi
+    FROM ServizioAggiuntivo
+    WHERE ID_ServizioAggiuntivo IN (
+        SELECT ID_ServizioAggiuntivo
+        FROM PrenotazioneServizioAggiuntivo
+        WHERE ID_Prenotazione = NEW.ID_Prenotazione
+    );
+    UPDATE Fattura
+    SET Totale = Totale + costo_servizi
+    WHERE ID_Prenotazione = NEW.ID_Prenotazione;
+    END;
+Scelta degli identificatori
+Cliente: ID_Cliente
+Camera: ID_Camera
+Prenotazione: ID_Prenotazione
+ServizioAggiuntivo: ID_ServizioAggiuntivo
+Fattura: ID_Fattura
+Schema E-R finale
+
+
+Schema relazionale
+Camera (ID_Camera, Tipo_camera, Numero_letti, Servizi_inclusi, Tariffa, Disponibilità)
+Prenotazione (ID_Prenotazione, Data_checkin, Data_checkout, ID_Cliente, ID_Camera)
+PrenotazioneServizioAggiuntivo (ID_Prenotazione, ID_ServizioAggiuntivo)
+ServizioAggiuntivo (ID_ServizioAggiuntivo, Nome, Costo, Descrizione, Società, P.IVA)
+Cliente (ID_Cliente, Nome, Cognome, Indirizzo, Numero_telefono, Email, Nazionalità, Data_nascita, Password)
+Fattura (ID_Fattura, Data_emissione, Totale, ID_Prenotazione)
+
+
+
+Implementazione web
+Per implementare l’interfaccia web ho usato le seguenti tecnologie: HTML, SCSS, JavaScript, React (Libreria js per UI), Axios (Libreria js per effettuare richiesta http dal browser o da Node.js) per il Front-end mentre Node.js (Utilizzato per creare server web ed eseguire codice js), Express.js (Framework web per Node.js che semplifica sviluppo web e API)
+Alcuni screen dell’implementazione web
+
+
+
+
+
+
+
+
+
+
+
+
